@@ -80,6 +80,73 @@ body {
     padding: 20px 30px;
     float: right;
 }
+.card{
+    box-shadow: 0 0 8px 0 rgba(0,0,0,0.2);
+}
+.profile-details{
+    margin: 5em 0;
+}
+.profile-area{
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-gap:20px;
+}
+table{
+    width:100%;
+    
+}
+.profile-list{
+    margin:3em 0;
+    padding:30px;
+}
+.user-details{
+    position: absolute;
+    top:15%;
+    left:85%;
+}
+.user-details-list {
+    padding: 20px;
+    list-style: none;
+}
+.user-details-list li img{
+    height: 100px;
+    width: 100;
+}
+/* .profile-content{
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-gap:10px;
+}
+.profile-left{
+    width:50vw;
+}
+.profile-right{
+    width:5vw;
+} */
+.edit-btn{
+    color:white;
+    text-decoration: none;
+    background: #4286f4;
+    padding: 10px 15px;
+    border-radius: 8px;
+    margin-right: 5px;
+}
+.delete-btn{
+    color:white;
+    text-decoration: none;
+    background: #f44336;
+    padding: 10px 15px;
+    border-radius: 8px;
+    margin-right: 5px;
+}
+table, th, td {
+    border: 1px solid black;
+    border-collapse: collapse;
+}
+th, td {
+    padding: 15px;
+}
+
 /* Style the footer */
 .footer {
     text-align: center;
@@ -113,6 +180,19 @@ button {
     cursor: pointer;
     width: 100%;
 }
+.button1 {
+    position: absolute;
+    left:17%;
+    background-color: #4CAF50;
+    color: white;
+    padding: 12px 20px;
+    margin: 20px 0;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    
+}
+
 
 button:hover {
     opacity: 0.8;
