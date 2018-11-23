@@ -49,7 +49,7 @@ body {
     margin: 0;
     object-fit: cover; 
     height: 550px;
-    background-image: url('/ui/images/Gado.jpeg');
+    background-image: url('../images/Gado.jpeg');
     
 }
 #content img{
