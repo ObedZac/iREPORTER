@@ -42,7 +42,7 @@ body{
 }
 /* Style the content */
 .content {
-    background-image: url("ui/images/Gado.jpg");   
+    background-image: url("../images/Gado.jpg");   
     height: 550px; /* Should be removed. Only for demonstration */
     background-position: center;
     background-repeat: no-repeat;
