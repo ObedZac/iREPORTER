@@ -20,4 +20,11 @@ class Find():
         }
         Redflags.append(Redflag)
         return {"status": 201, "data":Redflag}
+    def specific(self, flag):
+        for Redflag in Redflags
+            if Redflag["id"] == flag:
+                return {"status":200,"data": Redflag}
+            else:
+                return{"status":404' "data": 'Redflag not found}
+
          

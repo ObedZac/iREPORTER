@@ -8,4 +8,8 @@ class RedFlags(Resource):
     def post(self):
         new_post = Find().new()
         return new_post
+class RedFlagsSpecific(Resource):
+    def get(self, flag):
+        specific_red_flag = Find().specific()
+        return specific_red_flag
         
