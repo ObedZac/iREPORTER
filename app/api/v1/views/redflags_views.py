@@ -21,3 +21,8 @@ class RedFlagsSpecific(Resource):
     def put(self, modify):
         new_red_flag = Find().modification()
         return new_red_flag
+    def delete(self, redflag):
+        delete_flag = Find().delete_redf()
+        return delete_flag
+
+
