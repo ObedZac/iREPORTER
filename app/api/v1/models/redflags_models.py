@@ -25,6 +25,15 @@ class Find():
             if Redflag["id"] == flag:
                 return {"status":200,"data": Redflag}
             else:
-                return{"status":404' "data": 'Redflag not found}
-
-         
+                return{"status":404, "data": "Redflag not found"}
+    def modification(self,modify):
+        for Redflag in Redflags:
+            if Redflag["id"] == modify:
+                Redflag["title"] = request.json["title"]
+                Redflag["type"] = request.json["type"]
+                Redflag["images"] = request.json["images"]
+                Redflag["video"] = request.json["video"]
+                Redflag["location"] = request.json["location"]
+                Redflag["description"] = request.json["description"]
+                return {"status":204, "data": Redflag }
+                
