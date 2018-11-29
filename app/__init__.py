@@ -1,6 +1,7 @@
 from flask import Flask, Blueprint
 
-from api.v1 import version_one as v1
+from .api.v1 import version_one as v1
+
 
 def create_app():
     APP= Flask(__name__)
