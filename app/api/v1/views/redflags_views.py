@@ -5,4 +5,7 @@ class RedFlags(Resource):
     def get(self):
         redflags = Find().all()
         return redflags
+    def post(self):
+        new_post = Find().new()
+        return new_post
         
