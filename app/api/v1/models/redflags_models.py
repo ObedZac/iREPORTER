@@ -36,4 +36,9 @@ class Find():
                 Redflag["location"] = request.json["location"]
                 Redflag["description"] = request.json["description"]
                 return {"status":204, "data": Redflag }
+    def delete_redf(self, redflag_id):
+        for Redflag in Redflags:
+            if Redflag["id"] == redflag_id:
+                Redflags.remove(Redflag[0])
+                return {"status":204, "message":"Redflag successfuly deleted"}
                 
