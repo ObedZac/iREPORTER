@@ -10,7 +10,7 @@ class Find():
         self.db = Redflags
 
     def all(self):
-        return jsonify({"status":200, "data":self.db})
+        return {"status":200, "data":self.db, 'message': 'All redflags found successfully'}
 
     def new(self): 
         data = request.get_json()
@@ -36,14 +36,15 @@ class Find():
             'location' : location
         }
         self.db.append(payload)
-        return jsonify ({"status": 201, "data":self.db})
+        return {"status":200, "data":self.db, 'message': 'Redflag posted successfully!'}
 
     def specific(self, id):
         for Redflag in Redflags:
             if Redflag["id"] == id:
-                return {"status":200,"data": Redflags[0]}
-            # else:
-            #     return {"status":404, "data":"not found" }
+                return {"status":200, "data":self.db[0], "message": "Redflag successfully retrieved"}
+            
+
+        return {"status":404, "data":"not found" }
 
 
     def modification(self, id):
@@ -55,10 +56,14 @@ class Find():
                 # Redflag["video"] = request.json["video"]
                 Redflag["location"] = request.json["location"]
                 # Redflag["description"] = request.json["description"]
-                return {"status":204, "data": Redflag }
+                return {"status":200, "data": Redflag, 'message': 'Redflag updated successfully!'}
+        else:
+            return {"status":404, "data":"not found" }
+
+
     def delete_redf(self, id):
         for Redflag in Redflags:
             if Redflag["id"] == id:
                 Redflags.remove(Redflag)
-                return {"status":204, "message":"Redflag successfuly deleted"}
+                return {"status":200, 'message':'Redflag successfuly deleted'}
                 
