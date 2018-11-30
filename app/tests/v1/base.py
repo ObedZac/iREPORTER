@@ -122,6 +122,7 @@ class BaseTestCase(TestCase):
             }
 
         self.update_redflag ={
+            "id": 1,
             "createdOn" : datetime.datetime.now().strftime('%c'),  
             "createdBy" : "carolmobic", 
             "type" : "RedFlag",
