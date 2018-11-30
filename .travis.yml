@@ -10,6 +10,7 @@ install:
 script:
 
   - pytest --cov-report=term-missing --cov=app
+  - coveralls
 
 after-success:
  coveralls
