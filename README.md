@@ -4,6 +4,8 @@ This is a project aimed at making a web application than can enable anyone whist
 
 Continous intergration was done using Travis CI and can be seen here [![Build Status](https://travis-ci.org/ObedZac/iREPORTER.svg?branch=develop)](https://travis-ci.org/ObedZac/iREPORTER).
 
+The tests coverage is [![Coverage Status](https://coveralls.io/repos/github/ObedZac/iREPORTER/badge.svg?branch=develop)](https://coveralls.io/github/ObedZac/iREPORTER?branch=develop)
+
 
 
 
