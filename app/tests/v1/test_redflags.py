@@ -45,21 +45,21 @@ class TestRequestsTestCase(BaseTestCase):
         data = json.loads(response.get_data())
         self.assertEqual(data['message'], "All redflags found successfully")
 
-    # def test_view_a_redflag(self):
-    #     """Test for viewing a particular redflag"""
-    #     #existing redflag
-    #     response = self.client().get('api/v1/redflags/1')
-    #     self.assertEqual(response.status_code, 200)
-    #     data = json.loads(response.get_data())
-    #     self.assertEqual(data['message'], "Redflag successfully retrieved")
+    def test_view_a_redflag(self):
+        """Test for viewing a particular redflag"""
+        #existing redflag
+        response = self.client().get('api/v1/redflags/2')
+        self.assertEqual(response.status_code, 200)
+        data = json.loads(response.get_data())
+        self.assertEqual(data['message'], "Redflag successfully retrieved")
 
-    # def test_view_reflag_not_found(self):
-    #     """Test for viewing a redflag that does not exist"""
-    #     #redflag does not exist
-    #     response = self.client().get('api/v1/redflags/1')
-    #     self.assertEqual(response.status_code, 200)
-    #     data = json.loads(response.get_data())
-    #     self.assertEqual(data['message'], "Redflag does not exist!")
+    def test_view_reflag_not_found(self):
+        """Test for viewing a redflag that does not exist"""
+        #redflag does not exist
+        response = self.client().get('api/v1/redflags/1')
+        self.assertEqual(response.status_code, 404)
+        data = json.loads(response.get_data())
+        self.assertEqual(data['data'], "not found")
 
     def test_modify_a_redflag_found(self):
         """Test for modifying a redflag found"""

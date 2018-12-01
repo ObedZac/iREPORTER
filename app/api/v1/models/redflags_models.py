@@ -44,7 +44,7 @@ class Find():
             if Redflag["id"] == id:
                 return {"status": 200, "data": self.db[0], "message": "Redflag successfully retrieved"}, 200
 
-        return {"status": 404, "data": "not found"}, 404
+            return {"status": 404, "data": "not found"}, 404
 
     def modification(self, id):
         for Redflag in Redflags:
