@@ -1,7 +1,6 @@
 from flask import Flask, Blueprint
 from .api.v1 import version_one as v1
 from instance.config import app_config
-# from .db_config import create_tables
 
 
 def create_app(config_name):
@@ -10,14 +9,7 @@ def create_app(config_name):
     APP.config.from_object(app_config[config_name])
     APP.config.from_pyfile('config.py')
 
-    # create-tables()
 
     APP.register_blueprint(v1)
 
     return APP
-
-
-# def create_app():
-#     APP= Flask(__name__)
-#     APP.register_blueprint(v1)
-#     return APP
