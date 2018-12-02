@@ -19,17 +19,6 @@ class Find():
         title = data['title']
         flag_type = data['type']
         location = data["location"]
-        # Redflag = {
-        #     "createdon" : datetime.datetime.now(),
-        #     "createdby" : args["createdby"],
-        #     "type" : args["type"],
-        #     "title": args["title"],
-        #     "images": args["image"],
-        #     "video": args["video"],
-        #     "location": args["location"],
-        #     "status" : "pending",
-        #     "description" : args["description"]
-        # }
         payload = {
             'id': id,
             'title': title,
