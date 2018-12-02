@@ -105,9 +105,9 @@ Test | API-endpoint |HTTP-Verb | Inputs
 ---------------------| ---------------- | ------ | ----------------
 Users can create new post | api/v1/redflags | POST | {"redflag_id":1,"title":"title","body":"body"}
 users can view all their posts | api/v1/redflags | GET | None
-users can view a post | api/v1/redflags/<int:redflag_id> | GET |None
-users can modify their post | api/v1/redflags/<int:redflag_id> | PUT |{"title":"title", "body":"body"}
-users can delete a post | api/v1/questions/<int:redflag_id> | DELETE |None
+users can view a post | api/v1/redflags/<int:id> | GET |None
+users can modify their post | api/v1/redflags/<int:id> | PUT |{"title":"title", "body":"body"}
+users can delete a post | api/v1/questions/<int:id> | DELETE |None
 
 
 *Testing*
