@@ -1,6 +1,6 @@
 from flask import Blueprint
 from flask_restful import Api
-from .views.redflags_views import RedFlags, RedFlagsSpecific
+from .views.incidences_views import RedFlags, RedFlagsSpecific
 
 version_one = Blueprint("v1", __name__, url_prefix="/api/v1")
 API = Api(version_one)
