@@ -1,3 +1,4 @@
+"""App configuration settings"""
 import os
 
 

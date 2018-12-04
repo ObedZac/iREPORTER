@@ -116,8 +116,8 @@ class BaseTestCase(TestCase):
             "title": "NCA site auth",
             "location" : "37.12N, 3.7E",
             "status": "pending",
-            "Images" : ["image"], 
-            "Videos" : ["image"],
+            "images" : "image", 
+            "video" : "video",
             "comment" : "falling  building"
             }
 
@@ -129,8 +129,8 @@ class BaseTestCase(TestCase):
             "title": "NCA site autho",
             "location" : "37.12N, 3.7E",
             "status": "pending",
-            "Images" : ["image"], 
-            "Videos" : ["image"],
+            "images" : ["image"], 
+            "video" : ["image"],
             "comment" : "falling construction building"
             }
         
