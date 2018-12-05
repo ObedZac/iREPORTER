@@ -16,9 +16,9 @@ class TestRequestsTestCase(BaseTestCase):
         """Test for posting a redflag"""
         #correct request
         response = self.create_incident()
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 201)
         data = json.loads(response.get_data())
-        self.assertEqual(data['message'], 'redflag posted successfully!'),200
+        self.assertEqual(data['message'], 'redflag posted successfully!'),201
 
 
     def test_view_all_redflags(self):
