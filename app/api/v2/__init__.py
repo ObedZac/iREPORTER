@@ -8,5 +8,4 @@ API = Api(version_two)
 
 API.add_resource(RedFlags, '/incidences')
 API.add_resource(RedFlagsSpecific, '/incidences/<int:id>')
-API.add_resource(RedFlags, '/users')
-API.add_resource(RedFlagsSpecific, '/users/<int:id>')
+
