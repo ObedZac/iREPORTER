@@ -83,16 +83,34 @@ class RedFlagsSpecific(Resource, Incident):
         return {"status": 404, "data": "not found"}, 404
 
     def put(self, id):
+        request = parser.parse_args()
         """Edit a specific incidence method"""
         payloads = {
-            "title": request.json["title"],
-            "type": request.json["type"],
-            "location": request.json["location"],
-            "images": request.json["images"],
-            "video": request.json["video"],
-            "comment": request.json["comment"],
-            "status": request.json["status"]
+            "title": request["title"],
+            "type": request["type"],
+            "location": request["location"],
+            "images": request["images"],
+            "video": request["video"],
+            "comment": request["comment"],
+            "status": request["status"]
         }
+        errors = []
+
+        if payloads["title"] == "" or payloads["title"].isspace() or not payloads["title"].isalpha():
+            errors.append(
+                {"title": "Title field can not be empty, numbers only  or contain special characters."})
+        if payloads["location"] == "" or payloads["location"].isspace() or not payloads["location"].isalpha():
+            errors.append(
+                {"location": "Location field can not be empty, numbers only  or contain special characters."})
+        if payloads["comment"] == "" or payloads["comment"].isspace() or not payloads["comment"].isalpha():
+            errors.append(
+                {"comment": "Comment field can not be empty, numbers only  or contain special characters."})
+
+        if errors:
+            return {
+                "errors": errors
+            }
+
         new_red_flag = self.modification(id, **payloads)
         if new_red_flag:
             return {"status": 200, "data": new_red_flag,

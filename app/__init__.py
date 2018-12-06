@@ -15,6 +15,6 @@ def create_app(config_name):
 
     APP.register_blueprint(v1)
 
-    APP.register_blueprint(v2)
+    # APP.register_blueprint(v2)
 
     return APP
