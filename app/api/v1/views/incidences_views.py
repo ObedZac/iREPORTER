@@ -68,7 +68,7 @@ class RedFlags(Resource, Incident):
             }
 
         new_post = self.new(payload)
-        return {"status": 201, "data": new_post[-1], 'message': 'redflag posted successfully!'}, 201
+        return {"status": 201, "data": new_post[-1], 'message': 'redflag posted successfully!'}
 
 
 class RedFlagsSpecific(Resource, Incident):

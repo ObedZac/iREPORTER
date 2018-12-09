@@ -8,7 +8,7 @@ class TestRequestsTestCase(BaseTestCase):
 
     def create_incident(self):
         """Initialize tests by creating a post"""
-        response = self.client().post('api/v1/redflags', data=json.dumps(
+        response = self.client().post('api/v1/incidences', data=json.dumps(
             self.red_flag), headers={'content-type': "application/json"})
         return response
 
@@ -18,12 +18,12 @@ class TestRequestsTestCase(BaseTestCase):
         response = self.create_incident()
         self.assertEqual(response.status_code, 201)
         data = json.loads(response.get_data())
-        self.assertEqual(data['message'], 'redflag posted successfully!'),201
+        self.assertEqual(data['message'], 'redflag posted successfully!')
 
 
     def test_view_all_redflags(self):
         """Test for viewing all redflags"""
-        response = self.client().get('api/v1/redflags')
+        response = self.client().get('api/v1/incidences')
         self.assertEqual(response.status_code, 200)
         data = json.loads(response.get_data())
         self.assertEqual(data['message'], "All redflags found successfully")
@@ -31,7 +31,7 @@ class TestRequestsTestCase(BaseTestCase):
     def test_view_a_redflag(self):
         """Test for viewing a particular redflag"""
         #existing redflag
-        response = self.client().get('api/v1/redflags/1')
+        response = self.client().get('api/v1/incidences/1')
         self.assertEqual(response.status_code, 200)
         data = json.loads(response.get_data())
         self.assertEqual(data['message'], "redflag successfully retrieved")
@@ -39,7 +39,7 @@ class TestRequestsTestCase(BaseTestCase):
     def test_view_reflag_not_found(self):
         """Test for viewing a redflag that does not exist"""
         #redflag does not exist
-        response = self.client().get('api/v1/redflags/45')
+        response = self.client().get('api/v1/incidences/45')
         self.assertEqual(response.status_code, 404)
         data = json.loads(response.get_data())
         self.assertEqual(data['data'], "not found")
@@ -47,7 +47,7 @@ class TestRequestsTestCase(BaseTestCase):
     def test_modify_a_redflag_found(self):
         """Test for modifying a redflag found"""
         self.create_incident()
-        response = self.client().put(f'api/v1/redflags/{self.update_redflag["id"]}',
+        response = self.client().put(f'api/v1/incidences/{self.update_redflag["id"]}',
                                      data=json.dumps(self.update_redflag),
                                      headers={'content-type': "application/json"})
         data = json.loads(response.get_data())
@@ -69,7 +69,7 @@ class TestRequestsTestCase(BaseTestCase):
 
     def test_modify_a_redflag_not_found(self):
         """Test for modifying a redflag not found"""
-        response = self.client().put(f'api/v1/redflags/2',
+        response = self.client().put(f'api/v1/incidences/2',
                                      data=json.dumps(self.update_redflag),
                                      headers={'content-type': "application/json"})
         data = json.loads(response.get_data())
@@ -78,14 +78,14 @@ class TestRequestsTestCase(BaseTestCase):
 
     def test_user_delete_a_redflag(self):
         """Test for deleting a redflag"""
-        response = self.client().delete('api/v1/redflags/2')
+        response = self.client().delete('api/v1/incidences/2')
         self.assertEqual(response.status_code, 200)
         data = json.loads(response.data)
         self.assertEqual(data['message'], "redflag successfuly deleted")
 
     def test_user_delete_a_redflag_not_found(self):
         """Test for deleting a redflag not found"""
-        response = self.client().delete('api/v1/redflags/45')
+        response = self.client().delete('api/v1/incidences/45')
         self.assertEqual(response.status_code, 404)
         data = json.loads(response.data)
         self.assertDictEqual({'data': 'not found', 'status': 404}, data)
