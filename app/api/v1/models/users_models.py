@@ -63,7 +63,7 @@ class Users():
 
     @staticmethod
     def find_by_email(email):
-        """Method for find user by username"""
+        """Method for find user by email"""
         for user in users:
             if user.email == email:
                 return user
