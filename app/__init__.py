@@ -18,8 +18,8 @@ def create_app(config_name):
     APP.config['JWT_SECRET_KEY'] = 'week2'
 
 
-    APP.register_blueprint(v1)
+    # APP.register_blueprint(v1)
 
-    # APP.register_blueprint(v2)
+    APP.register_blueprint(v2)
 
     return APP

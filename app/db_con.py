@@ -3,10 +3,8 @@ import os
 import psycopg2
 from psycopg2.extras import RealDictCursor
 
-DATABASE_URL = 'postgresql://localhost/ireporter?user=postgres&\
-                    password=calculus3'
-TEST_DATABASE_URL = 'postgresql://localhost/ireporter_test?user=postgres&\
-                        password=calculus3'
+DATABASE_URL = 'postgresql://localhost/ireporter?user=zac&password=calculus3'
+TEST_DATABASE_URL = 'postgresql://localhost/ireporter_test?user=zac&password=calculus3'
 CONNECTION_CREDS = {
     "host": os.getenv('DB_HOST'),
     "database": os.getenv('DB_NAME'),
@@ -53,8 +51,7 @@ class Database ():
                 return conn
             except:
                 conn = psycopg2.connect(
-                    'postgresql://localhost/ireporter?user=postgres\
-                        &password=calculus3')
+                    'postgresql://localhost/ireporter?user=&password=calculus3')
                 print('connected successfully to db\n')
                 return conn
         except (Exception, psycopg2.DatabaseError) as error:
@@ -73,8 +70,7 @@ class Database ():
                 return conn
             except:
                 conn = psycopg2.connect(
-                    'postgresql://localhost/ireporter_test?user=postgres\
-                    &password=calculus3')
+                    'postgresql://localhost/ireporter_test?user=postgres&password=calculus3')
                 print('connected successfully to test database\n')
                 return conn
         except (Exception, psycopg2.DatabaseError) as error:
@@ -110,7 +106,7 @@ class Database ():
                 )
             """,
             """
-                CREATE TABLE IF NOT EXISTS incidents(
+                CREATE TABLE IF NOT EXISTS incident(
                     incident_id SERIAL PRIMARY KEY NOT NULL,
                     createdOn VARCHAR(50) NOT NULL ,
                     modifiedOn VARCHAR(50) NOT NULL,
@@ -120,7 +116,7 @@ class Database ():
                     images VARCHAR(80),
                     video VARCHAR(80),
                     title VARCHAR(100) NOT NULL,
-                    comment VARCHAR(250) NOT NULL unique,
+                    comment VARCHAR(250) NOT NULL,
                     createdBy INT REFERENCES users (user_id)
 
                 )
