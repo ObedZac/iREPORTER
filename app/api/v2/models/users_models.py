@@ -2,32 +2,36 @@
 import datetime
 from flask import request
 from werkzeug.security import generate_password_hash, check_password_hash
+from app.db_con import Database
 
-users = []
-
-
-class Users():
+class Users(Database):
     """class containing methods for users manipulation"""
 
-    id = 0
-
-    def __init__(self, firstname=None,
+    def __init__(self,
+                 firstname=None,
                  lastname=None,
+                 othernames=None,
                  email=None,
-                 phonenumber=None,
+                 phoneNumber=None,
                  username=None,
-                 password=None):
+                 password=None,
+                 isAdmin=False):
         """Method for initializing users storage"""
+        super().__init__('main')
+        self.id=None
         self.firstname = firstname
         self.lastname = lastname
+        self.othernames = othernames
         self.email = email
-        self.password = self.generate_pass_hash()
-        self.phoneNumber = phonenumber
+        self.password = Users.generate_pass_hash()
+        self.phoneNumber = phoneNumber
         self.username = username
-        self.created_on = datetime.datetime.now().strftime('%c')
-        self.db = users
+        self.registered = datetime.datetime.now().strftime('%c')
+        self.isAdmin = isAdmin
 
-        Users.id += 1
+    # def __repr__(self):
+    #     """ Return repr(self). """
+    #     return "{} in User Model.".format(self.username)
 
     @staticmethod
     def generate_pass_hash():
@@ -46,29 +50,67 @@ class Users():
         """
         return check_password_hash(self.password, password)
 
-    def find_by_id(self, id):
+    def find_by_id(self, user_id):
         """Method for find user by id"""
-        for user in self.db:
-            if user["id"] == id:
-                return user
-            return None
+        self.cur.execute("SELECT * FROM users "
+                            "WHERE id=%s", (user_id,))
+        user = self.fetch_one()
+        self.save()
 
-    @staticmethod
-    def find_by_name(username):
+        if user:
+            return self.mapping(user)
+        return None
+
+    def find_by_name(self, username):
         """Method for find user by username"""
-        for user in users:
-            if user.username == username:
-                return user
+        self.cur.execute("SELECT * FROM users "
+                            "WHERE username=%s", (username,))
+        user = self.fetch_one()
+        self.save()
+
+        if user:
+            return self.mapping(user)
         return None
 
-    @staticmethod
-    def find_by_email(email):
+    def find_by_email(self, email):
         """Method for find user by email"""
-        for user in users:
-            if user.email == email:
-                return user
-        return None
+        self.cur.execute("SELECT * FROM users "
+                            "WHERE email=%s", (email,))
+        user = self.fetch_one()
+        self.save()
 
+        if user:
+            return self.mapping(user)
+        return None
+        
     def save_to_db(self):
         """Method for saving user to database."""
-        self.db.append(self)
+        query = """
+                    INSERT INTO users (username, firstname, lastname,\
+                    othernames, phoneNumber, email, password, isAdmin, registered)
+                    VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s);
+                """
+        data = (self.username, self.firstname,
+                self.lastname, self.othernames,
+                self.phoneNumber, self.email,
+                self.password, self.isAdmin,
+                self.registered)
+
+        self.cur.execute(query, data)
+        self.save()
+
+    def mapping(self, data):
+        """ map user to user object"""
+        print(data)
+        self.id = data["user_id"]
+        self.username = data["username"]
+        self.password = data["password"]
+        self.firstname = data["firstname"]
+        self.lastname = data["lastname"]
+        self.othernames = data["othernames"]
+        self.email = data["email"]
+        self.phoneNumber = data["phonenumber"]
+        self.isAdmin = data["isadmin"]
+        self.registered = data["registered"]
+
+        return self
