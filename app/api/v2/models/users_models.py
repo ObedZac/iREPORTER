@@ -4,6 +4,7 @@ from flask import request
 from werkzeug.security import generate_password_hash, check_password_hash
 from app.db_con import Database
 
+
 class Users(Database):
     """class containing methods for users manipulation"""
 
@@ -18,7 +19,7 @@ class Users(Database):
                  isAdmin=False):
         """Method for initializing users storage"""
         super().__init__('main')
-        self.id=None
+        self.id = None
         self.firstname = firstname
         self.lastname = lastname
         self.othernames = othernames
@@ -28,10 +29,6 @@ class Users(Database):
         self.username = username
         self.registered = datetime.datetime.now().strftime('%c')
         self.isAdmin = isAdmin
-
-    # def __repr__(self):
-    #     """ Return repr(self). """
-    #     return "{} in User Model.".format(self.username)
 
     @staticmethod
     def generate_pass_hash():
@@ -53,7 +50,7 @@ class Users(Database):
     def find_by_id(self, user_id):
         """Method for find user by id"""
         self.cur.execute("SELECT * FROM users "
-                            "WHERE id=%s", (user_id,))
+                         "WHERE id=%s", (user_id,))
         user = self.fetch_one()
         self.save()
 
@@ -64,7 +61,7 @@ class Users(Database):
     def find_by_name(self, username):
         """Method for find user by username"""
         self.cur.execute("SELECT * FROM users "
-                            "WHERE username=%s", (username,))
+                         "WHERE username=%s", (username,))
         user = self.fetch_one()
         self.save()
 
@@ -75,14 +72,14 @@ class Users(Database):
     def find_by_email(self, email):
         """Method for find user by email"""
         self.cur.execute("SELECT * FROM users "
-                            "WHERE email=%s", (email,))
+                         "WHERE email=%s", (email,))
         user = self.fetch_one()
         self.save()
 
         if user:
             return self.mapping(user)
         return None
-        
+
     def save_to_db(self):
         """Method for saving user to database."""
         query = """

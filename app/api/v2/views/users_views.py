@@ -6,6 +6,12 @@ from flask_jwt_extended import create_access_token
 
 parser = reqparse.RequestParser(bundle_errors=True)
 
+parser.add_argument('username', type=str, required=True,
+                    help='This field cannot be left blank!')
+parser.add_argument('password', type=str, required=True,
+                    help='This field cannot be left blank!')
+
+
 class Login(Resource):
     """
     Authorize a user to access the data.
@@ -15,11 +21,6 @@ class Login(Resource):
                 }
     :returns verified user
     """
-    parser.add_argument('username', type=str, required=True,
-                        help='This field cannot be left blank!')
-    parser.add_argument('password', type=str, required=True,
-                        help='This field cannot be left blank!')
-
     def post(self):
         """
         Receives data in json format and authenticates the user is exists
@@ -66,17 +67,11 @@ class Register(Resource):
 
     parser.add_argument('lastname', type=str, required=True, default="",
                         help='This field cannot be left blank!')
-
-    parser.add_argument('password', type=str, required=True, default="",
-                        help='This field cannot be left blank!')
-
+                        
     parser.add_argument('email', type=str, required=True, default="",
                         help='This field cannot be left blank!')
 
     parser.add_argument('phoneNumber', type=int, required=True, default="",
-                        help='This field cannot be left blank!')
-
-    parser.add_argument('username', type=str, required=True, default="",
                         help='This field cannot be left blank!')
 
     def post(self):
@@ -95,7 +90,6 @@ class Register(Resource):
         return {"status": 201,
                 "data": [
                     {
-                        "id": user.id,
                         "username": user.username,
                         "registered": user.registered
                     }],
