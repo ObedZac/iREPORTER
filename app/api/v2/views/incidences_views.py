@@ -1,3 +1,4 @@
+"""This module holds the classes and methods for incidents views manipulation"""
 from flask import request, jsonify
 from flask_jwt_extended import jwt_required
 from flask_restful import Resource, reqparse
@@ -47,18 +48,17 @@ parser.add_argument('comment',
                     )
 
 
-class Incidents(Resource):
+class Incidences(Resource):
     """
-    Fetch a all red-flag record.
-    Create a red-flag record.
+    Fetch all incidents records.
+    Create a new incident record.
 
     :param: incident:
             {
               “id” : Integer,
-              “type” : String,       // [red-flag, intervention]
-              “location” : String,   // Lat Long coordinates
-              “status” : String,     // [draft,
-              under investigation, resolved, rejected]
+              “type” : String,
+              “location” : String,  
+              “status” : String, 
               “Images” : [Image, Image],
               “Videos” : [Image, Image],
               “comment” : String
@@ -68,7 +68,7 @@ class Incidents(Resource):
     @jwt_required    
     def get(self):
         """
-            This method retrives all the posted incidents from the database
+            This method retrives all the posted incidents from database
         """
         self.model = Incident()
         if self.model.get_all_incidents():
@@ -81,6 +81,9 @@ class Incidents(Resource):
 
     @jwt_required
     def post(self):
+        """
+            This method creates a new incident into the database
+        """
         data = parser.parse_args()
         new_record = Incident(createdBy="createdBY", **data)
         new_record.save_to_db()
@@ -90,3 +93,26 @@ class Incidents(Resource):
                     "message": "{} record created "
                                "Successfully.".format(new_record.record_type)
                 }]}, 201
+
+class Incidence(Resource):
+    """
+        This class holds methods for single incident manipulation
+    """
+    @jwt_required
+    def get(self, incident_id):
+        """
+            This method retrieves an incident from the database by using its id
+        """
+        self.model = Incident()
+        incidence = self.model.find_incidence_by_id(incident_id)
+        if not incidence:
+            return {"status": 404, "error": "Incident not found"}, 404
+        return {"status": 200,
+                        "data": [
+                            {
+                                "redflag": incidence,
+                            }
+                        ],
+                        "message": "Incident successfully retrieved!"}, 200
+
+   
