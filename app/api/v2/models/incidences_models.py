@@ -36,27 +36,6 @@ class Incident(Database):
                     video=self.video,
                     title=self.title
                     )
-    
-    def mapping (self, data):
-        """
-        Update
-        
-        :return:
-        """
-        self.createdBy = data[0]
-        self.incident_id = data[1],
-        self.record_type = data[2],
-        self.location = data[3],
-        self.status = data[4],
-        self.comment = data[5],
-        self.createdOn = data[6],
-        self.modifiedOn = data[7],
-        self.images = data[8],
-        self.video = data[10],
-        self.title = data[11]
-
-
-        return self
 
     def get_all_incidents(self):
         """
@@ -85,7 +64,7 @@ class Incident(Database):
         self.save()
 
         if incidents:
-            return [self.mapping(incident) for incident in incidents]
+            return incidents
         return None
 
     def find_incidence_by_id(self, incident_id):
@@ -96,13 +75,13 @@ class Incident(Database):
         :type record_id: int
         :return: record item
         """
-        command = f"SELECT * FROM incident WHERE id={incident_id}"
+        command = f"SELECT * FROM incident WHERE incident_id={incident_id}"
         self.query(command)
         incidents = self.fetch_one()
         self.save()
 
         if incidents:
-            return self.mapping(incidents)
+            return incidents
         return None
 
     def save_to_db(self):
