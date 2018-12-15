@@ -93,7 +93,7 @@ class Database ():
         tables = (
             """
                 CREATE TABLE IF NOT EXISTS users(
-                    user_id SERIAL PRIMARY KEY NOT NULL,
+                    id SERIAL PRIMARY KEY NOT NULL,
                     firstname CHAR(20),
                     lastname CHAR(20),
                     othernames CHAR(20),
@@ -117,7 +117,7 @@ class Database ():
                     video VARCHAR(80),
                     title VARCHAR(100) NOT NULL,
                     comment VARCHAR(250) NOT NULL,
-                    createdBy INT REFERENCES users (user_id)
+                    createdBy INT REFERENCES users (id)
 
                 )
             """
