@@ -6,14 +6,13 @@ from ..models.incidences_models import Incident, redflags
 
 parser = reqparse.RequestParser()
 parser.add_argument("title", type=str, required=True, help="Field required.")
-parser.add_argument("type", type=str, required=False, help="Field required.")
+parser.add_argument("type", type=str, required=True, help="Field required.")
 parser.add_argument("location", type=str, required=True,
                     help="Field required.")
 parser.add_argument("images", type=str, required=False, help="Field required.")
 parser.add_argument("video", type=str, required=False, help="Field required.")
-parser.add_argument("status", type=str, required=False, help="Field required.")
+parser.add_argument("status", type=str, required=True, help="Field required.")
 parser.add_argument("comment", type=str, required=True, help="Field required.")
-
 
 class RedFlags(Resource, Incident):
     """Path for get all incidences and posting a new one"""
@@ -52,15 +51,12 @@ class RedFlags(Resource, Incident):
         }
         errors = []
 
-        if title == "" or title.isspace() or not title.isalpha():
-            errors.append(
-                {"title": "Title field can not be empty, numbers only  or contain special characters."})
-        if location == "" or location.isspace() or not location.isalpha():
-            errors.append(
-                {"location": "Location field can not be empty, numbers only  or contain special characters."})
-        if comment == "" or comment.isspace() or not comment.isalpha():
-            errors.append(
-                {"comment": "Comment field can not be empty, numbers only  or contain special characters."})
+        if title == "" or title.isspace():
+            errors.append({"title": "Title field can not be empty."})
+        if location == "" or location.isspace():
+            errors.append({"location": "location field can not be empty."})
+        if comment == "" or comment.isspace():
+            errors.append({"comment": "comment field can not be empty."})
 
         if errors:
             return {
@@ -68,8 +64,7 @@ class RedFlags(Resource, Incident):
             }
 
         new_post = self.new(payload)
-        return {"status": 201, "data": new_post[-1], 'message': 'redflag posted successfully!'}, 201
-
+        return {"status": 200, "data": new_post, 'message': 'redflag posted successfully!'}, 200
 
 class RedFlagsSpecific(Resource, Incident):
     """Path for get specific, update and delete a post"""
