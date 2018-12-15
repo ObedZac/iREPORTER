@@ -64,7 +64,8 @@ class Incidents(Resource):
               “comment” : String
             }
     :returns records and success massage in json format.
-    """    
+    """
+    @jwt_required    
     def get(self):
         """
             This method retrives all the posted incidents from the database

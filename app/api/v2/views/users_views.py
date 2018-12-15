@@ -30,7 +30,7 @@ class Login(Resource):
         request_data = parser.parse_args()
         user = Users().find_by_name(request_data["username"])
         if user and user.verify(password=request_data["password"]):
-            expire_time = datetime.timedelta(minutes=20)
+            expire_time = datetime.timedelta(minutes=100)
             token = create_access_token(user.username,
                                         expires_delta=expire_time)
             return {"status": 200,

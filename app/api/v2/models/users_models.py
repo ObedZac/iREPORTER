@@ -19,7 +19,6 @@ class Users(Database):
                  isAdmin=False):
         """Method for initializing users storage"""
         super().__init__('main')
-        self.id = None
         self.firstname = firstname
         self.lastname = lastname
         self.othernames = othernames
@@ -99,7 +98,7 @@ class Users(Database):
     def mapping(self, data):
         """ map user to user object"""
         print(data)
-        self.id = data["user_id"]
+        self.id = data["id"]
         self.username = data["username"]
         self.password = data["password"]
         self.firstname = data["firstname"]
