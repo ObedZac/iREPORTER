@@ -139,7 +139,7 @@ class Database ():
     def drop(self, table):
         """ drop existing tables """
         try:
-            self.query("DROP TABLE IF EXISTS" + table)
+            self.query("DROP TABLE IF EXISTS " + table)
             self.save()
             self.close()
         except (Exception, psycopg2.DatabaseError) as error:
