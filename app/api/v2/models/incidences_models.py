@@ -1,5 +1,6 @@
 
 from app.db_con import Database
+from flask_jwt_extended import get_jwt_identity
 import psycopg2
 import datetime
 
@@ -8,7 +9,7 @@ class Incident(Database):
     def __init__(self, incident_id=None, record_type=None,location=None, status=None,
                 images=None, video=None, title=None, comment=None, createdBy=None):
         super().__init__('main')
-        self.createdBY = createdBy
+        self.createdBy = self.current_user()
         self.incident_id = incident_id
         self.createdOn = datetime.datetime.now()
         self.modifiedOn = datetime.datetime.now()
@@ -24,7 +25,7 @@ class Incident(Database):
         return f'{self.comment} incident in incident Database.'
 
     def serialize(self):
-        return dict(createdBY=self.createdBY,
+        return dict(createdBy=self.createdBy,
                     incident_id=self.incident_id,
                     record_type=self.record_type,
                     location=self.location,
@@ -86,9 +87,9 @@ class Incident(Database):
 
     def save_to_db(self):
         self.cur.execute("""
-                INSERT INTO incident (record_type, createdOn, modifiedOn, title, video, images, location, status, comment) 
-                VALUES( %s, %s, %s, %s, %s, %s, %s, %s, %s);""", ( self.record_type, self.createdOn, 
-                self.modifiedOn, self.title, self.video, self.images, self.location, self.status, self.comment))
+                INSERT INTO incident (record_type, createdOn, modifiedOn, title, video, images, location, status, comment, createdBy) 
+                VALUES( %s, %s, %s, %s, %s, %s, %s, %s, %s, %s);""", (self.record_type, self.createdOn, 
+                self.modifiedOn, self.title, self.video, self.images, self.location, self.status, self.comment, self.createdBy))
         self.save()
         self.close()
 
@@ -149,5 +150,13 @@ class Incident(Database):
         self.cur.execute("""DELETE FROM incident WHERE id = %s;""",
                             (self.incident_id,))
         self.save()
+    
+    def current_user(self):
+        """
+            This method gets the logged in user from a jwt token.
+            It returns the username.
+        """
+        self.user = get_jwt_identity()
+        return self.user
 
     

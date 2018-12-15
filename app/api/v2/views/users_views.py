@@ -31,7 +31,7 @@ class Login(Resource):
         user = Users().find_by_name(request_data["username"])
         if user and user.verify(password=request_data["password"]):
             expire_time = datetime.timedelta(minutes=100)
-            token = create_access_token(user.username,
+            token = create_access_token(user.id,
                                         expires_delta=expire_time)
             return {"status": 200,
                     'token': token,

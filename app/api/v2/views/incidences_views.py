@@ -85,7 +85,7 @@ class Incidences(Resource):
             This method creates a new incident into the database
         """
         data = parser.parse_args()
-        new_record = Incident(createdBy="createdBY", **data)
+        new_record = Incident(createdBy="createdBy", **data)
         new_record.save_to_db()
 
         return {"status": 201,
@@ -114,5 +114,27 @@ class Incidence(Resource):
                             }
                         ],
                         "message": "Incident successfully retrieved!"}, 200
+ 
+    @jwt_required
+    def delete(self, incident_id):
+        """
+            This method removes an incident from the db
+        """
+        self.model = Incident()
+        incident = self.model.find_incidence_by_id(incident_id)
+        if not incident:
+            return {"status": 404, "error": "Incident not found"}, 404
+
+
+        inc = incident.get('createdBy')        
+        user = self.model.current_user()
+        if user != inc:
+            return {'status': 403,"error": "This action is forbidden.",
+            'message': ' You are trying to delete someone else post'}
+
+
+        if self.model.delete_from_db():
+            return {"status": 200, "message": "Incident successfuly deleted"}, 200
+
 
    
