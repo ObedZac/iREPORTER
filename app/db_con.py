@@ -1,90 +1,48 @@
 """ This module holds the database migrations """
-import os
 import psycopg2
 from psycopg2.extras import RealDictCursor
+from flask import current_app
 
-DATABASE_URL = 'postgresql://localhost/ireporter?user=zac&password=calculus3'
-TEST_DATABASE_URL = 'postgresql://localhost/ireporter_test?user=zac&password=calculus3'
-CONNECTION_CREDS = {
-    "host": os.getenv('DB_HOST'),
-    "database": os.getenv('DB_NAME'),
-    "user": os.getenv('DB_USER'),
-    "password": os.getenv('DB_PASSWORD')
-}
-TEST_CONNECTION_CREDS = {
-    "host": os.getenv('TEST_DB_HOST'),
-    "database": os.getenv('TEST_DB_NAME'),
-    "user": os.getenv('TEST_DB_USER'),
-    "password": os.getenv('TEST_DB_PASSWORD')
-}
-
-
-class Database ():
+class Database():
     """
         consists of methods to connect and query from db
     """
 
-    def __init__(self, db):
-        self.db_url = DATABASE_URL
-        self.db_test_url = TEST_DATABASE_URL
-        self.db_con_creds = CONNECTION_CREDS
-        self.db_test_con_creds = TEST_CONNECTION_CREDS
-        self.conn = self.choose_db(db)
-        self.cur = self.conn.cursor(cursor_factory=RealDictCursor)
+    def __init__(self):
 
-    def connection(self, *args, **url):
-        """
-            connect to postgres database
-        """
-        conn = psycopg2.connect(url)
-        return conn
+        self.db_host = current_app.config['DB_HOST']
+        self.db_username = current_app.config['DB_USER']
+        self.db_password = current_app.config['DB_PASSWORD']
+        self.db_name = current_app.config['DB_NAME']
+        self.db_url = current_app.config['DATABASE_URL']
 
-    def init_db(self):
-        """
-            connect to iReporter database
-        """
         try:
-            print("connecting to database...\n")
-            try:
-                conn = connection(self.db_url)
-                print('connected successfully to db\n')
-                return conn
-            except:
-                conn = psycopg2.connect(
-                    'postgresql://localhost/ireporter?user=&password=calculus3')
-                print('connected successfully to db\n')
-                return conn
-        except (Exception, psycopg2.DatabaseError) as error:
-            print(error)
-            print('error connecting to database\n')
+            self.conn = psycopg2.connect(
+                host=self.db_host,
+                user=self.db_username,
+                password=self.db_password,
+                database=self.db_name,
+            )
+            self.cur = self.conn.cursor(cursor_factory=RealDictCursor)
+        except:
+            self.conn = psycopg2.connect(self.db_url)
+            self.cur = self.conn.cursor(cursor_factory=RealDictCursor)
 
-    def init_test_db(self):
-        """
-            connect to test db
-        """
+    def init_db(self, app):
         try:
-            print("connecting to test db...\n")
-            try:
-                conn = connection(self.db_test_url)
-                print('connected to test db\n')
-                return conn
-            except:
-                conn = psycopg2.connect(
-                    'postgresql://localhost/ireporter_test?user=postgres&password=calculus3')
-                print('connected successfully to test database\n')
-                return conn
-        except (Exception, psycopg2.DatabaseError) as error:
-            print(error)
-            print('error connecting to test database\n')
-
-    def choose_db(self, db):
-        """ choose database to connect to """
-        if db == "main":
-            conn = self.init_db()
-            return conn
-        elif db == "test":
-            conn = self.init_test_db()
-            return conn
+            self.conn = psycopg2.connect(
+                host=app.config['DB_HOST'],
+                user=app.config['DB_USER'],
+                password=app.config['DB_PASSWORD'],
+                database=app.config['DB_NAME'],
+            )
+            print("connectted successfully to the database...\n")
+            self.cur = self.conn.cursor(cursor_factory=RealDictCursor)
+        except:
+            url =app.config['DATABASE_URL']
+            self.conn = psycopg2.connect(url)
+            print("connected successfully to the database...\n")
+            self.cur = self.conn.cursor(cursor_factory=RealDictCursor)
 
     def create_app_tables(self):
         """
@@ -139,15 +97,11 @@ class Database ():
     def drop(self, table):
         """ drop existing tables """
         try:
-            self.query("DROP TABLE IF EXISTS " + table)
+            self.cur.execute("DROP TABLE IF EXISTS" + ' '+ table)
             self.save()
-            self.close()
         except (Exception, psycopg2.DatabaseError) as error:
-            print(error)
+            print (error)
             print('could not drop tables\n')
-        finally:
-            if self.conn is not None:
-                self.close()
 
     def save(self):
         """

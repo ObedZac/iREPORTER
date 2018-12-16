@@ -18,7 +18,7 @@ class Users(Database):
                  password=None,
                  isAdmin=False):
         """Method for initializing users storage"""
-        super().__init__('main')
+        super().__init__()
         self.firstname = firstname
         self.lastname = lastname
         self.othernames = othernames
