@@ -1,228 +1,207 @@
 """ This is the base class for all the tests"""
+
 import unittest
-import json
 from unittest import TestCase
+from flask import current_app
 from app import create_app
-import datetime
+from app.db_con import Database
+
 
 class BaseTestCase(TestCase):
-    """ set up configurations for the test environment"""
-    @classmethod
-    def setUpClass(self):
-        """set up app configuration"""
-        self.app = create_app(config_name='testing')
-        self.client = self.app.test_client
-        self.app.testing = True
-        self.users = [
-             {
-            "id" : 1, 
-            "firstname" : "carol",
-            "lastname" : "mumbi",
-            "email" : "carolmumbi@gmail.com",
-            "phoneNumber" : "0708123123",
-            "username" : "carolmobic", 
-            "registered" : 26/11/2018,
-            "isAdmin" : False,
-            },
-             {
-            "id" : 2, 
-            "firstname" : "lawrence",
-            "lastname" : "chege",
-            "email" : "laurencechege@gmail.com",
-            "phoneNumber" : "0708123123",
-            "username" : "lauchege", 
-            "registered" : 26/11/2018,
-            "isAdmin" : False,
-            },
-             {
-            "id" : 3, 
-            "firstname" : "kenn",
-            "lastname" : "hinga",
-            "email" : "kenn@gmail.com",
-            "phoneNumber": "0708123123",
-            "username" : "gathee", 
-            "registered" : 26/11/2018,
-            "isAdmin" : False,
-            }
-        ]
+    """
+        This class allows for an instateneous creation of the database and
+        provides a blank database after every run
+    """
+    
+    def setUp(self):
+        """
+            Setup the flask app for testing.
+            It initializes the app and app context.
+        """
+        APP = create_app("testing")
+        self.app = APP.test_client()
+        self.app_context = APP.app_context()
+        self.app_context.push()
+        with APP.app_context():
+            db = Database()
+            db.init_db(APP)
+            db.drop('incident')
+            db.drop('users')
+            db.create_app_tables()
+        self.token = 0
+
+        self.red_flag = {
+            "record_type": "redflag",
+            "title": "Kenya",
+            "location": "40N, 80E",
+            "images": "images",
+            "video": "video",
+            "comment": "say no to corruption"
+        }
+        self.redflag_location = {
+            "location": "40N, 80E"
+        }
+        self.redflag_comment = {
+            "comment": "say no to corruption"
+        }
+        self.red_flag2 = {
+            "record_type": "redflag",
+            "title": "Kenya",
+            "location": "40N, 80E",
+            "images": "images",
+            "video": "video",
+            "comment": "say no to corruption"
+        }
+        self.red_flag3 = ()
+
+
+        self.update_redflag = {
+            "record_type": "redflag",
+            "title": "Kenya",
+            "location": "40N, 80E",
+            "images": "images",
+            "video": "video]",
+            "comment": "say no to corruption"
+        }
+        self.redflag_no_title = {
+            "record_type": "redflag",
+            "title": "",
+            "location": "40N, 80E",
+            "images": "images",
+            "video": "video",
+            "comment": "say no to corruption"
+        }
+        self.redflag_invalid_type = {
+            "record_type": "",
+            "title": "Kenya",
+            "location": "40N, 80E",
+            "images": 'images',
+            "video": "video",
+            "comment": "say no to corruption"
+        }
+        self.redflag_invalid_image = {
+            "record_type": "redflag",
+            "title": "Kenya",
+            "location": "40N, 80E",
+            "video": "video",
+            "comment": "say no to corruption"
+        }
+        self.redflag_invalid_location = {
+            "record_type": "redflag",
+            "title": "Kenya",
+            "images": "images",
+            "video": "video",
+            "comment": "say no to corruption"
+        }
+        self.redflag_no_comment = {
+            "record_type": "redflag",
+            "title": "Kenya",
+            "location": "40N, 80E",
+            "images": "images",
+            "video": "video",
+            "comment": ""
+        }
+       
+        self.redflag_invalid_video = {
+            "record_type": "redflag",
+            "title": "NCA site auth",
+            "location": "40N, 80E",
+            "images": "images",
+            "comment": "say no to corruption"
+        }
+        self.status_resolved = {
+            "status": "resolved"
+        }
+        self.status_rejected = {
+            "status": "rejected"
+        }
         self.person = {
-            "id" : 1, 
-            "firstname" : "carol",
-            "lastname" : "mumbi",
-            "email" : "carolmumbi@gmail.com",
-            "phoneNumber" : "0708123123",
-            "username" : "carolmobic", 
-            "registered" : 26/11/2018,
-            "isAdmin" : False,
-            }
+            "firstname": "carol",
+            "lastname": "mumbi",
+            "email": "carolmumbi@gmail.com",
+            "phoneNumber": "0708123123",
+            "username": "carolmobic",
+            "password": "mae12#emA"
+        }
+        self.person1 = {
+            "firstname": "mwaniki",
+            "lastname": "mumbi",
+            "email": "carolmumbi@gmail.com",
+            "phoneNumber": "0708123123",
+            "username": "carolnice",
+            "password": "mae12#emA"
+        }
         self.person_no_username = {
             "email": "bluish@gmail.com",
-            "password": "maembembili"
+            "password": "mae12#emA"
         }
         self.person_no_email = {
-            "username": "lawrence",
-            "password": "maembembili"
+            "username": "zac",
+            "password": "mae12#emA"
         }
         self.person_no_password = {
-            "username": "lawrence",
-            "email": "mbuchez8@gmail.com",
+            "username": "zac",
+            "email": "azakkx@gmail.com",
         }
         self.person_invalid_email = {
-            "username": "lawrence",
-            "email": "mbuchez.com",
-            "password": "maembembili"
+            "username": "zac",
+            "email": "azakkx.com",
+            "password": "mae12#emA"
+        }
+        self.person_invalid_username = {
+            "username": "",
+            "email": "azakkx@gmail.com",
+            "password": "mae12#embili"
+        }
+        self.person_invalid_password = {
+            "username": "azakkx",
+            "email": "azakkx@gmail.com",
+            "password": "calculus"
         }
         self.person_existing_user = {
-            "id" : 1, 
-            "firstname" : "carol",
-            "lastname" : "mumbi",
-            "email" : "carolmumbi@gmail.com",
-            "phoneNumber" : "0708123123",
-            "username" : "carolmobic", 
-            "registered" : 26/11/2018,
-            "isAdmin" : False,
+            "firstname": "carolol",
+            "lastname": "mumbi",
+            "email": "carolmumbi@gmail.com",
+            "phoneNumber": "0708123123",
+            "username": "carolmobic",
+            "password": "calculus3"
+        }
+
+        self.correct_login = {
+            "username": "carolmobic",
+            "password": "mae12#emA"
+            }
+        self.correct_login1 = {
+            "username": "carolmobic",
+            "password": "calculus3"
             }
 
-        self.correct_login = {"username": "carolmumbi",
-                              "password": "liquids23"}
-        self.wrong_login = {"username": "lawrence",
-                            "password": "mistubishi"}
+        self.wrong_login = {"username": "carolmoboc",
+                            "password": "azakkx"}
         self.no_username = {"username": "",
-                            "password": "maembembili"}
-        self.no_password = {"username": "lawrence",
+                            "password": "maembemA"}
+        self.no_password = {"username": "zac",
                             "password": ""}
         self.admin = {
-            "id" : 1, 
-            "firstname" : "admin",
-            "lastname" : "admin",
-            "othernames" : "admin",
-            "email" : "admin@gmail.com",
-            "phoneNumber" : "0711123123",
-            "username" : "admin", 
-            "registered" : 26/11/2018,
-            "isAdmin" : True,
-            
-            }
+            "id": 1,
+            "firstname": "carol",
+            "lastname": "mumbi",
+            "email": "carolmumbi@gmail.com",
+            "phoneNumber": "0708123123",
+            "username": "carolmobic",
+            "registered": "26/11/2018"
+        }
 
         self.admin_correct = {"username": "admin",
                               "password": "admn1234"}
         self.admin_wrong = {"username": "lawrence",
-                            "password": "mimi"}
-
-        self.red_flag = {
-            "createdOn" : datetime.datetime.now().strftime('%c'),  
-            "createdBy" : "carolmobic", 
-            "type" : "RedFlag",
-            "title": "NCA site auth",
-            "location" : "37.12N, 3.7E",
-            "status": "pending",
-            "images" : "image", 
-            "video" : "video",
-            "comment" : "falling  building"
-            }
-
-        self.update_redflag ={
-            "id": 1,
-            "createdOn" : datetime.datetime.now().strftime('%c'),  
-            "createdBy" : "carolmobic", 
-            "type" : "RedFlag",
-            "title": "NCA site autho",
-            "location" : "37.12N, 3.7E",
-            "status": "pending",
-            "images" : ["image"], 
-            "video" : ["image"],
-            "comment" : "falling construction building"
-            }
-        
-        self.redflags = [
-            {
-                "id": 1,
-                "createdOn" : datetime.datetime.now().strftime('%c'),  
-                "createdBy" : "carolmobic", 
-                "type" : "RedFlag",
-                "title": "NCA site auth",
-                "location" : "37.12N, 3.7E",
-                "status": "pending",
-                "Images" : ["image"], 
-                "Videos" : ["image"],
-                "comment" : "falling construction building"
-            },
-            {
-                "id": 2,
-                "createdOn" : datetime.datetime.now().strftime('%c'),  
-                "createdBy" : "carolmobic", 
-                "type" : "Intervention",
-                "title": "corrupt police",
-                "location" : "37.12N, 3.7E",
-                "status": "resolved",
-                "Images" : ["image"], 
-                "Videos" : ["image"],
-                "comment" : "traffic police takng bribes"
-            },
-            {
-                "id": 3,
-                "createdOn" : datetime.datetime.now().strftime('%c'),  
-                "createdBy" : "carolmobic", 
-                "type" : "RedFlag",
-                "title": "NCA site auth",
-                "location" : "37.12N, 3.7E",
-                "status": "pending",
-                "Images" : ["image"], 
-                "Videos" : ["image"],
-                "comment" : "falling construction building"
-            },
-            {
-                "id": 4,
-                "createdOn" : datetime.datetime.now().strftime('%c'),  
-                "createdBy" : "carolmobic", 
-                "type" : "RedFlag",
-                "title": "NCA site auth",
-                "location" : "37.12N, 3.7E",
-                "status": "pending",
-                "Images" : ["image"], 
-                "Videos" : ["image"],
-                "comment" : "falling construction building"
-            }
-        ]
-        self.redflag_no_title = {
-            "createdOn" : datetime.datetime.now().strftime('%c'),  
-            "createdBy" : "carolmobic", 
-            "type" : "RedFlag",
-            "title": "",
-            "location" : "37.12N, 3.7E",
-            "status": "pending",
-            "Images" : ["image"], 
-            "Videos" : ["image"],
-            "comment" : "falling construction building"
-        }
-        self.redflag_no_comment = {
-            "createdOn" : datetime.datetime.now().strftime('%c'),  
-            "createdBy" : "carolmobic", 
-            "type" : "RedFlag",
-            "title": "NCA site auth",
-            "location" : "37.12N, 3.7E",
-            "status": "pending",
-            "Images" : ["image"], 
-            "Videos" : ["image"],
-            "comment" : ""
-        }
-        self.redflag_invalid_title = {
-            "createdOn" : datetime.datetime.now().strftime('%c'),  
-            "createdBy" : "carolmobic", 
-            "type" : 12345,
-            "title": "NCA site auth",
-            "location" : "37.12N, 3.7E",
-            "status": "pending",
-            "Images" : ["image"], 
-            "Videos" : ["image"],
-            "comment" : "falling construction building"
-        }
-        self.status_Resolved = {
-            "status": "Resolved"
-        }
-        self.status_Rejected = {
-            "status": "Rejected"
-        }
+                            "password": "caaa"}
 
     def tearDown(self):
+        """
+            This method is called if setUp() succeeds.
+            It destroys the app context.
+        """
         pass
+
+

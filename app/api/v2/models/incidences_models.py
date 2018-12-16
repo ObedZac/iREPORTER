@@ -8,7 +8,7 @@ class Incident(Database):
 
     def __init__(self, incident_id=None, record_type=None,location=None, status=None,
                 images=None, video=None, title=None, comment=None, createdBy=None):
-        super().__init__('main')
+        super().__init__()
         self.createdBy = self.current_user()
         self.incident_id = incident_id
         self.createdOn = datetime.datetime.now()
