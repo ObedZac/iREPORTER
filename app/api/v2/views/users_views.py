@@ -1,9 +1,16 @@
 import datetime
+from flask import jsonify
 from flask_restful import Resource, reqparse, request
-from app.api.v1.models.users_models import Users
+from app.api.v2.models.users_models import Users
 from flask_jwt_extended import create_access_token
 
 parser = reqparse.RequestParser(bundle_errors=True)
+
+parser.add_argument('username', type=str, required=True,
+                    help='This field cannot be left blank!')
+parser.add_argument('password', type=str, required=True,
+                    help='This field cannot be left blank!')
+
 
 class Login(Resource):
     """
@@ -14,11 +21,6 @@ class Login(Resource):
                 }
     :returns verified user
     """
-    parser.add_argument('username', type=str, required=True,
-                        help='This field cannot be left blank!')
-    parser.add_argument('password', type=str, required=True,
-                        help='This field cannot be left blank!')
-
     def post(self):
         """
         Receives data in json format and authenticates the user is exists
@@ -26,10 +28,10 @@ class Login(Resource):
         :return: Jwt token and success status
         """
         request_data = parser.parse_args()
-        user = Users.find_by_name(request_data["username"])
+        user = Users().find_by_name(request_data["username"])
         if user and user.verify(password=request_data["password"]):
-            expire_time = datetime.timedelta(minutes=20)
-            token = create_access_token(user.username,
+            expire_time = datetime.timedelta(minutes=100)
+            token = create_access_token(user.id,
                                         expires_delta=expire_time)
             return {"status": 200,
                     'token': token,
@@ -65,24 +67,18 @@ class Register(Resource):
 
     parser.add_argument('lastname', type=str, required=True, default="",
                         help='This field cannot be left blank!')
-
-    parser.add_argument('password', type=str, required=True, default="",
-                        help='This field cannot be left blank!')
-
+                        
     parser.add_argument('email', type=str, required=True, default="",
                         help='This field cannot be left blank!')
 
-    parser.add_argument('phonenumber', type=int, required=True, default="",
-                        help='This field cannot be left blank!')
-
-    parser.add_argument('username', type=str, required=True, default="",
+    parser.add_argument('phoneNumber', type=int, required=True, default="",
                         help='This field cannot be left blank!')
 
     def post(self):
         """Post method to register a new user"""
         request_data = parser.parse_args()
 
-        if Users.find_by_name(request_data["username"]) or Users.find_by_email(request_data["email"]):
+        if Users().find_by_name(request_data["username"]) or Users().find_by_email(request_data["email"]):
 
             return {"status": 400,
                     "data": [{
@@ -94,9 +90,8 @@ class Register(Resource):
         return {"status": 201,
                 "data": [
                     {
-                        "id": user.id,
                         "username": user.username,
-                        "createdon": user.created_on
+                        "registered": user.registered
                     }],
                 "message": 'Your user profile has been created Succesfully.'
                 }, 201

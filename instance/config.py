@@ -2,20 +2,35 @@
 import os
 
 
-class Config(object):
+class Config:
     """Parent configuration class."""
     DEBUG = False
+    JWT_SECRET_KEY = os.getenv("JWT_SECRET_KEY")
+    BUNDLE_ERRORS = True
+    DB_HOST = os.getenv('DB_HOST')
+    DB_USER = os.getenv('DB_USER')
+    DB_PASSWORD = os.getenv('DB_PASSWORD')
+
 
 class DevelopmentConfig(Config):
-    """Configurations for Development."""
+    """
+        This defines the development environment of the app
+    """
+    PROPAGATE_EXEPTIONS = True
     DEBUG = True
-    TESTING = True
+    DATABASE = os.getenv('DATABASE_URL')
+    DB_NAME = os.getenv('DB_NAME')
+    DATABASE_URL = 'postgresql://localhost/ireporter?user=zac&password=calculus3'
 
 
 class TestingConfig(Config):
     """Configurations for Testing, with a separate test database."""
     TESTING = True
-    DEBUG = False
+    DEBUG = True
+    DATABASE = os.getenv('DATABASE_URL')
+    DB_NAME = os.getenv('TEST_DB_NAME')
+    DATABASE_URL = 'postgresql://localhost/ireporter_test?user=zac&password=calculus3'
+
 
 class StagingConfig(Config):
     """Configurations for Staging."""
@@ -26,6 +41,8 @@ class ProductionConfig(Config):
     """Configurations for Production."""
     DEBUG = False
     TESTING = False
+    DB_NAME = os.getenv('DB_NAME')
+    DATABASE_URL = os.getenv('DATABASE_URL')
 
 
 app_config = {
