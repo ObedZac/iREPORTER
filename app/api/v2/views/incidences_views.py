@@ -126,15 +126,15 @@ class Incidence(Resource):
             return {"status": 404, "error": "Incident not found"}, 404
 
 
-        inc = incident.get('createdBy')        
+        online = incident['createdby']        
         user = self.model.current_user()
-        if user != inc:
-            return {'status': 403,"error": "This action is forbidden.",
-            'message': ' You are trying to delete someone else post'}
+        if user != online:
+            return {'status': 403,"error": "Action forbidden!",
+            'message': ' You can only delete an incident that is yours!'}
 
 
-        if self.model.delete_from_db():
-            return {"status": 200, "message": "Incident successfuly deleted"}, 200
+        elif self.model.delete_incident(incident_id):
+            return {"status": 200, "message": "Incident deleted successfuly."}, 200
 
 
    

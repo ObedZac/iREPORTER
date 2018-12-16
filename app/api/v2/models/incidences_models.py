@@ -141,15 +141,21 @@ class Incident(Database):
                             (status, self.incident_id))
         self.save()
 
-    def delete_from_db(self):
+    def delete_incident(self, incident_id):
         """
-        Find record and delete it.
-
-        :return: None
+            This method removes an incident by id from the database.
+            It takes the id of the incident as parameter and,
+            It returns the list of incidents.
         """
-        self.cur.execute("""DELETE FROM incident WHERE id = %s;""",
-                            (self.incident_id,))
-        self.save()
+        try:
+            self.cur.execute(
+                "DELETE FROM incident WHERE incident_id=%s", (incident_id,)
+                )
+            self.save()
+            return True
+        except (Exception, psycopg2.DatabaseError) as error:
+            print(error)
+            return None
     
     def current_user(self):
         """
