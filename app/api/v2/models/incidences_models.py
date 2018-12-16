@@ -21,23 +21,6 @@ class Incident(Database):
         self.title = title
         self.comment = comment
 
-    def __repr__(self):
-        return f'{self.comment} incident in incident Database.'
-
-    def serialize(self):
-        return dict(createdBy=self.createdBy,
-                    incident_id=self.incident_id,
-                    record_type=self.record_type,
-                    location=self.location,
-                    status=self.status,
-                    comment=self.comment,
-                    createdOn=self.createdOn,
-                    modifiedOn=self.modifiedOn,
-                    images=self.images,
-                    video=self.video,
-                    title=self.title
-                    )
-
     def get_all_incidents(self):
         """
             This method returns all the posted incidents
@@ -93,53 +76,106 @@ class Incident(Database):
         self.save()
         self.close()
 
-    def get_all(self):
-        self.query("SELECT * FROM incident")
-        incidents = self.fetch_all()
-        self.save()
-
-        if incidents:
-            return incidents
-        return None
-
-    def edit_location(self, location):
+    def check_status(self, incident_id):
         """
-        Update incident location
-
-        :param location:
-        :return: incident
+            Checks if incident status has been changed
         """
-        self.cur.execute("""
-                        UPDATE incident SET location = %s 
-                        WHERE id = %s;""",
-                            (location, self.incident_id))
-        self.save()
+        incident = self.find_incidence_by_id(incident_id)
+        status = incident.get('status').strip()
+        if status != 'pending':
+            return False
+        return True
 
-    def edit_comment(self, comment):
+    def edit_incident(self, record_type, location, images, video, title, comment, incident_id):
         """
-        Update incident comment
+            This method modifys one or all the fields of an incident
+            It takes the incident id as the parameter and,
+            It returns the updated incident as a result.
+        """
+        try:
+            self.cur.execute(
+                """
+                UPDATE incident
+                SET
+                record_type = %s,
+                location = %s,
+                images = %s,
+                video = %s,
+                title = %s,
+                comment = %s,
+                modifiedOn = %s
 
-        :param comment:
-        :return: Incident
-        """
-        self.cur.execute("""
-                                UPDATE incident SET comment = %s 
-                                WHERE id = %s;""",
-                            (comment, self.incident_id))
-        self.save()
+                WHERE incident_id = %s;
+                """,(record_type, location, images, video, title, comment, self.modifiedOn, incident_id,
+                )
+                )
+            self.save()
+            return True
+        except (Exception, psycopg2.DatabaseError) as error:
+            print(error)
+            return None
 
-    def edit_status(self, status):
+    def edit_location(self, location, incident_id):
         """
-        Update incident status
+            This method modifies the location field of an incident.
+            It takes the incident id as the parameter.
+            It saves the updated incident.
+        """
+        try:
+            self.cur.execute(
+                """
+                UPDATE incident
+                SET location = %s
+                WHERE incident_id = %s;
+                """, (location, incident_id)
+                )
+            self.save()
+            return True
+        except (Exception, psycopg2.DatabaseError) as error:
+            print(error)
+            return None
 
-        :param status:
-        :return: Incident
+
+    def edit_comment(self, comment, incident_id):
         """
-        self.cur.execute("""
-                                UPDATE incident SET status = %s 
-                                WHERE id = %s;""",
-                            (status, self.incident_id))
-        self.save()
+            This method modifies the comment of an incident.
+            It takes the incident id as parameter and,
+            It saves The updated incident as a result.
+
+        """
+        try:
+            self.cur.execute(
+                """
+                UPDATE incident
+                SET comment = %s
+                WHERE incident_id = %s;
+                """, (comment, incident_id)
+                )
+            self.save()
+            return True
+        except (Exception, psycopg2.DatabaseError) as error:
+            print(error)
+            return None
+
+    def edit_status(self, status, incident_id):
+        """
+            This method modifies the status field of an incident.
+            It takes the incident id as the parameter.
+            It saves the updated incident.
+        """
+        try:
+            self.cur.execute(
+                """
+                UPDATE incident
+                SET status = %s
+                WHERE incident_id = %s;
+                """, (status, incident_id)
+                )
+            self.save()
+            return True
+        except (Exception, psycopg2.DatabaseError) as error:
+            print(error)
+            return None
 
     def delete_incident(self, incident_id):
         """
