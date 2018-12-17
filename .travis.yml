@@ -2,11 +2,15 @@ language: python
 python:
 
   - "3.6" 
-
+services:
+  - postgres
 # command to install dependencies
 install:
   - pip install -r requirements.txt
 # command to run tests
+before_script:
+  - psql -c "CREATE DATABASE ireporter_test;" -U postgres
+
 script:
 
   - pytest --cov-report=term-missing --cov=app
