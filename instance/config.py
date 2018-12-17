@@ -20,7 +20,7 @@ class DevelopmentConfig(Config):
     DEBUG = True
     DATABASE = os.getenv('DATABASE_URL')
     DB_NAME = os.getenv('DB_NAME')
-    DATABASE_URL = 'postgresql://localhost/ireporter?user=zac&password=calculus3'
+    DATABASE_URL = os.getenv('DATABASE_URL')
 
 
 class TestingConfig(Config):
@@ -29,7 +29,7 @@ class TestingConfig(Config):
     DEBUG = True
     DATABASE = os.getenv('DATABASE_URL')
     DB_NAME = os.getenv('TEST_DB_NAME')
-    DATABASE_URL = 'postgresql://localhost/ireporter_test?user=zac&password=calculus3'
+    DATABASE_URL = os.getenv('DATABASE_URL')
 
 
 class StagingConfig(Config):
