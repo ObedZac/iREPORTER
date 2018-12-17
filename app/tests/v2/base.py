@@ -36,7 +36,8 @@ class BaseTestCase(TestCase):
             "location": "40N, 80E",
             "images": "images",
             "video": "video",
-            "comment": "say no to corruption"
+            "comment": "say no to corruption",
+            "status":"pending"
         }
         self.redflag_location = {
             "location": "40N, 80E"
@@ -50,7 +51,8 @@ class BaseTestCase(TestCase):
             "location": "40N, 80E",
             "images": "images",
             "video": "video",
-            "comment": "say no to corruption"
+            "comment": "say no to corruption",
+            "status":"pending"
         }
         self.red_flag3 = ()
 
@@ -61,7 +63,8 @@ class BaseTestCase(TestCase):
             "location": "40N, 80E",
             "images": "images",
             "video": "video]",
-            "comment": "say no to corruption"
+            "comment": "say no to corruption",
+            "status":"pending"
         }
         self.redflag_no_title = {
             "record_type": "redflag",
@@ -69,7 +72,8 @@ class BaseTestCase(TestCase):
             "location": "40N, 80E",
             "images": "images",
             "video": "video",
-            "comment": "say no to corruption"
+            "comment": "say no to corruption",
+            "status":"pending"
         }
         self.redflag_invalid_type = {
             "record_type": "",
@@ -77,21 +81,24 @@ class BaseTestCase(TestCase):
             "location": "40N, 80E",
             "images": 'images',
             "video": "video",
-            "comment": "say no to corruption"
+            "comment": "say no to corruption",
+            "status":"pending"
         }
         self.redflag_invalid_image = {
             "record_type": "redflag",
             "title": "Kenya",
             "location": "40N, 80E",
             "video": "video",
-            "comment": "say no to corruption"
+            "comment": "say no to corruption",
+            "status":"pending"
         }
         self.redflag_invalid_location = {
             "record_type": "redflag",
             "title": "Kenya",
             "images": "images",
             "video": "video",
-            "comment": "say no to corruption"
+            "comment": "say no to corruption",
+            "status":"pending"
         }
         self.redflag_no_comment = {
             "record_type": "redflag",
@@ -99,7 +106,8 @@ class BaseTestCase(TestCase):
             "location": "40N, 80E",
             "images": "images",
             "video": "video",
-            "comment": ""
+            "comment": "",
+            "status":"pending"
         }
        
         self.redflag_invalid_video = {
@@ -107,7 +115,8 @@ class BaseTestCase(TestCase):
             "title": "NCA site auth",
             "location": "40N, 80E",
             "images": "images",
-            "comment": "say no to corruption"
+            "comment": "say no to corruption",
+            "status": "pending"
         }
         self.status_resolved = {
             "status": "resolved"
@@ -164,7 +173,7 @@ class BaseTestCase(TestCase):
             "email": "carolmumbi@gmail.com",
             "phoneNumber": "0708123123",
             "username": "carolmobic",
-            "password": "calculus3"
+            "password": "cal@D3"
         }
 
         self.correct_login = {
@@ -174,7 +183,8 @@ class BaseTestCase(TestCase):
             }
         self.correct_login1 = {
             "username": "carolmobic",
-            "password": "calculus3"
+            "password": "cal@D3",
+            "email": "carolmumbi@gmail.com"
             }
 
         self.wrong_login = {"username": "carolmoboc",
