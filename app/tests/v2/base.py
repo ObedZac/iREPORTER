@@ -169,6 +169,7 @@ class BaseTestCase(TestCase):
 
         self.correct_login = {
             "username": "carolmobic",
+            "email": "carolmumbi@gmail.com",
             "password": "mae12#emA"
             }
         self.correct_login1 = {
