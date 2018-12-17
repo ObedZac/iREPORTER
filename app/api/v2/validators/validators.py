@@ -26,6 +26,5 @@ class Validation():
             checks if value in data is empty
         """
         self.value = value
-        if not isinstance(self.value, str):
-            return None
-        return True
+        return isinstance(self.value, str)
+            

@@ -3,6 +3,7 @@ from flask import request, jsonify
 from flask_jwt_extended import jwt_required
 from flask_restful import Resource, reqparse
 from app.api.v2.models.incidences_models import Incident
+from app.api.v2.validators.validators import Validation
 
 
 parser = reqparse.RequestParser(bundle_errors=True)
@@ -29,16 +30,16 @@ parser.add_argument('status',
                          "blank or Bad choice: {error_msg}"
                     )
 parser.add_argument('images',
-                    action='append',
+                    type=str,
                     help="This field can be left blank!"
                     )
 parser.add_argument('video',
-                    action='append',
+                    type=str,
                     help="This field can be left blank!"
                     )
 
 parser.add_argument('title',
-                    action='append',
+                    type=str,
                     help="This field can be left blank!"
                     )
 
@@ -81,8 +82,37 @@ class Incidences(Resource):
     @jwt_required
     def post(self):
         """This method creates a new incident into the database"""
-        data = parser.parse_args()
-        new_record = Incident(createdBy="createdBy", **data)
+        valid = Validation()
+        args = parser.parse_args()
+
+        record_type = args.get("record_type")
+        title = args.get("title")
+        images = args.get("images")
+        video = args.get("video")
+        location = args.get("location")
+        comment  = args.get("comment")
+
+        if not request.json:
+            return jsonify({"error" : "check your request type"})
+
+        if not valid.valid_string(title) or not title.strip() :
+            return {"error" : "Title is invalid or empty"}, 400
+
+        if not valid.valid_string(images) :
+            return {"error" : "Images link is invalid"}, 400
+
+        if not valid.valid_string(video):
+            return {"error" : "Video link is invalid"}, 400
+
+        if not valid.valid_string(location):
+            return {"error" : "location input is invalid"}, 400
+
+        if not valid.valid_string(comment) or not comment.strip():
+            return {"error" : "description is invalid or empty"}, 400
+
+        if not record_type.strip() :
+            return {"error" : "Type is invalid or empty"}, 400
+        new_record = Incident(createdBy="createdBy", **args)
         new_record.save_to_db()
 
         return {"status": 201,
@@ -136,6 +166,7 @@ class Incidence(Resource):
                             type=str,
                             help="location field is optional.")
         self.model = Incident()
+        valid = Validation()
         args = parser.parse_args()
         record_type = args.get("record_type")
         title = args.get("title")
@@ -143,6 +174,27 @@ class Incidence(Resource):
         video = args.get("video")
         location = args.get("location")
         comment = args.get("comment")
+
+        if not request.json:
+            return jsonify({"error" : "check your request type"})
+
+        if not valid.valid_string(title) or not title.strip() :
+            return {"error" : "Title is invalid or empty"}, 400
+
+        if not valid.valid_string(images) :
+            return {"error" : "Images link is invalid"}, 400
+
+        if not valid.valid_string(video):
+            return {"error" : "Video link is invalid"}, 400
+
+        if not valid.valid_string(location):
+            return {"error" : "location input is invalid"}, 400
+
+        if not valid.valid_string(comment) or not comment.strip():
+            return {"error" : "description is invalid or empty"}, 400
+
+        if not record_type.strip() :
+            return {"error" : "Type is invalid or empty"}, 400
 
         incident = self.model.find_incidence_by_id(incident_id)
         if not incident:
