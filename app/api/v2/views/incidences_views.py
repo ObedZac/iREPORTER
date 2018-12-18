@@ -313,7 +313,7 @@ class IncidentStatus(Resource):
                     }]}, 404
 
         user = self.model.current_user()
-        if user != 1 :
+        if user != True:
             return {'status': 403, 'error': 'you do not have permission to do that!'},403
 
         if self.model.edit_status(data["status"], incident_id):
