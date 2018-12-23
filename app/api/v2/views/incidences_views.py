@@ -315,7 +315,7 @@ class IncidentStatus(Resource):
         online = incident['createdby']
         user = self.model.current_user()
         if user != online:
-            return {'status': 403, "error": "Action forbidden!",
+            return {'status': 403, "error": "Action is forbidden!",
                     'message': ' You can only update comment on an incident that is yours!'}
 
         if self.model.edit_status(data["status"], incident_id):
