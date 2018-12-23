@@ -312,11 +312,9 @@ class IncidentStatus(Resource):
                         "message": "Incident record Not Found."
                     }]}, 404
 
-        online = incident['createdby']
         user = self.model.current_user()
-        if user != online:
-            return {'status': 403, "error": "Action is forbidden!",
-                    'message': ' You can only update comment on an incident that is yours!'}
+        
+        if user != True:
 
         if self.model.edit_status(data["status"], incident_id):
             return {
