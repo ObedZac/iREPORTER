@@ -24,7 +24,7 @@ class DevelopmentConfig(Config):
 
 
 class TestingConfig(Config):
-    """Configurations for Testing, with a separate test database."""
+    """Configurations of Testing, with a separate test database."""
     TESTING = True
     DEBUG = True
     DATABASE = os.getenv('DATABASE_URL')
