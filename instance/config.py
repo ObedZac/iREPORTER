@@ -3,7 +3,7 @@ import os
 
 
 class Config:
-    """Parent configuration class."""
+    """Parent configuration class method."""
     DEBUG = False
     JWT_SECRET_KEY = os.getenv("JWT_SECRET_KEY")
     BUNDLE_ERRORS = True
