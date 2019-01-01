@@ -14,7 +14,7 @@ class Config:
 
 class DevelopmentConfig(Config):
     """
-        This defines the development environment of the app
+        This defines the development environment of the api app
     """
     PROPAGATE_EXEPTIONS = True
     DEBUG = True
