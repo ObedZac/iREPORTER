@@ -12,8 +12,8 @@ python:
 install:
   - pip install -r requirements.txt
   # - pipenv install
-  # - pip install coverage
-  # - pip install codecov
+  - pip install coverage
+  - pip install codecov
 
 
 # command to run tests
